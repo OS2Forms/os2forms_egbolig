@@ -4,5 +4,18 @@
     "description": "Provides advanced webform for EGBolig",
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "license": "EUPL-1.2"
+    "license": "EUPL-1.2",
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    },
+    "require": {
+        "os2forms/os2forms": "^2.1"
+    }
 }
