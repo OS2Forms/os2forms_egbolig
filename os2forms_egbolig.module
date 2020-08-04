@@ -265,8 +265,7 @@ function os2forms_egbolig_sync_submission(array $form, FormStateInterface $form_
       $member = $egboligClient->fetchMember($cpr);
     }
     else {
-      // TODO: uncomment.
-      // $egboligClient->activateMembership($member);
+      $egboligClient->activateMembership($member);
     }
 
     $member = os2forms_egbolig_populate_member($member, $form_state);

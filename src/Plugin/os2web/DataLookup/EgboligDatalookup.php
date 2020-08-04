@@ -158,8 +158,6 @@ class EgboligDatalookup extends DataLookupBase implements EgboligDatalookupInter
     $response = $this->client->MemberGetListByCprNo(
       [
         'cprNo' => $cpr,
-        // TODO: remove this line.
-        'includeDeletedMembers' => 1,
       ]
     );
 
