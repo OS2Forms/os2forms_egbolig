@@ -1,4 +1,4 @@
-# OS2Forms EGBolig  [![Build Status](https://travis-ci.org/OS2forms/os2forms_egbolig.svg?branch=8.x)](https://travis-ci.org/OS2form/os2forms_egbolig)
+# OS2Forms EGBolig  [![Build Status](https://travis-ci.org/OS2forms/os2forms_egbolig.svg?branch=8.x)](https://travis-ci.org/OS2forms/os2forms_egbolig)
 
 ## Module purpose
 

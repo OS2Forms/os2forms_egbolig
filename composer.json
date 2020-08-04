@@ -1,0 +1,8 @@
+{
+    "name": "os2forms/os2forms_egbolig",
+    "type": "drupal-module",
+    "description": "Provides advanced webform for EGBolig",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "EUPL-1.2"
+}
