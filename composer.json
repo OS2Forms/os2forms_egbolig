@@ -16,6 +16,6 @@
         }
     },
     "require": {
-        "os2forms/os2forms": "^2.1"
+        "os2forms/os2forms": "^3.0"
     }
 }
