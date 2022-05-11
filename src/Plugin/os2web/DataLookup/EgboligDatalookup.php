@@ -392,7 +392,7 @@ class EgboligDatalookup extends DataLookupBase implements EgboligDatalookupInter
     // Update member education.
     $this->client->MemberUpdateEducation(
       [
-        'member' => $member,
+        'member' => $member_array,
       ]
     );
   }

@@ -61,17 +61,23 @@ function os2forms_egbolig_populate_member($member, FormStateInterface $form_stat
     $member->MemberNo = $values['cpr'];
   }
   $member->Email = $values['email'];
-  $member->Name = 'stan' . $values['name'];
-  $member->Address = 'address' . $values['address'];
+  $member->Name = $values['name'];
+  $member->Address = $values['address'];
   $member->HomePhone = $values['phone_nr'];
   $member->CoAddress = $values['c_o_address'];
   $member->MobilePhone = $values['phone_mobile'];
-  $member->PostalCodeCity = '1234' . $values['city_zip'];
+  $member->PostalCodeCity = $values['city_zip'];
   $member->Country = OS2FORMS_EGBOLIG_MEMBER_DEFAULT_COUNTRY;
   // Count od adults with partner.
   $member->Adults = 1 + $values['has_partner'];
 
   $member->Children = $values['has_children'];
+
+  $cpr = $values['cpr'];
+  $cpr62 = substr($cpr, 0, 6);
+  $cpr42 = substr($cpr, -4);
+  $member->cpr42 = $cpr42;
+  $member->cpr62 = $cpr62;
 
   $member->Education = !empty($values['education_type']) ? $values['education_type'] : NULL;
   $member->EducationStart = !empty($values['education_start_date']) ? date("Y-m-d", strtotime(str_replace('/', '.', $values['education_start_date']))) : NULL;
@@ -80,6 +86,9 @@ function os2forms_egbolig_populate_member($member, FormStateInterface $form_stat
   $member->EducationDocumentationReceived = empty($values['education_doc']) ? FALSE : TRUE;
 
   $member->EducationalInstitution = !empty($values['institution_name']) ? $values['institution_name'] : NULL;
+  if ($values['husleje_min']) {
+    $member->MinimumRent = $values['husleje_min'];
+  }
   $member->MaximumRent = $values['husleje_max'];
   $member->Pet = $values['husdyr'];
   $member->Criteria1 = $values['job_status'];

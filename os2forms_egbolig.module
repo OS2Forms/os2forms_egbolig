@@ -88,7 +88,7 @@ function os2forms_egbolig_form_alter(&$form, FormStateInterface $form_state, $fo
     try {
       $member = $egboligClient->fetchMember($cpr);
 
-      if ($member) {
+      if ($member && !$form_state->isSubmitted()) {
         // Filling basic info.
         os2forms_egbolig_set_field_default_value($form, $webform, 'phone_nr', $member->HomePhone);
         os2forms_egbolig_set_field_default_value($form, $webform, 'phone_mobile', $member->MobilePhone);
@@ -129,6 +129,7 @@ function os2forms_egbolig_form_alter(&$form, FormStateInterface $form_state, $fo
         $roomInformation = $egboligClient->fetchRoomWishes($member);
         os2forms_egbolig_set_field_default_value($form, $webform, 'antal_rum_min', $roomInformation['minRoom']);
         os2forms_egbolig_set_field_default_value($form, $webform, 'antal_rum_max', $roomInformation['maxRoom']);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'husleje_min', $member->MinimumRent);
         os2forms_egbolig_set_field_default_value($form, $webform, 'husleje_max', $member->MaximumRent);
         os2forms_egbolig_set_field_default_value($form, $webform, 'husdyr', $member->Pet);
 
