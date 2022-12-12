@@ -69,12 +69,20 @@ function os2forms_egbolig_form_alter(&$form, FormStateInterface $form_state, $fo
       $cpr = $egboligClient->getTestCpr();
 
       // Filling basic info that would otherwise come from CPR login.
-      $cprInfo = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('serviceplatformen_cpr')->getAddress($cpr);
-      os2forms_egbolig_set_field_default_value($form, $webform, 'cpr', $cpr);
-      os2forms_egbolig_set_field_default_value($form, $webform, 'name', $cprInfo['name']);
-      os2forms_egbolig_set_field_default_value($form, $webform, 'address', $cprInfo['road'] . ' ' . $cprInfo['road_no'] . ' ' . $cprInfo['floor'] . ' ' . $cprInfo['door']);
-      os2forms_egbolig_set_field_default_value($form, $webform, 'c_o_address', $cprInfo['coname']);
-      os2forms_egbolig_set_field_default_value($form, $webform, 'city_zip', $cprInfo['zipcode'] . ' ' . $cprInfo['city']);
+      /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
+      $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+      /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+      $cprPlugin = $pluginManager->createDefaultInstanceByGroup('cpr_lookup');
+
+      if ($cprPlugin->isReady()) {
+        $cprResult = $cprPlugin->lookup($cpr);
+
+        os2forms_egbolig_set_field_default_value($form, $webform, 'cpr', $cpr);
+        os2forms_egbolig_set_field_default_value($form, $webform, 'name', $cprResult->getName());
+        os2forms_egbolig_set_field_default_value($form, $webform, 'address', $cprResult->getStreet(). ' ' . $cprResult->getHouseNr() . ' ' . $cprResult->getFloor() . ' ' . $cprResult->getApartmentNr());
+        os2forms_egbolig_set_field_default_value($form, $webform, 'c_o_address', $cprResult->getCoName());
+        os2forms_egbolig_set_field_default_value($form, $webform, 'city_zip', $cprResult->getPostalCode() . ' ' . $cprResult->getCity());
+      }
 
       \Drupal::messenger()->addWarning(t('EGBolig is running in with TEST CPR. Submitting this webform will overwrite submission for this CPR: %cpr', ['%cpr' => $cpr]));
     }
