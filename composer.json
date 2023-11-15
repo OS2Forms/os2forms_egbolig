@@ -16,6 +16,6 @@
         }
     },
     "require": {
-        "os2forms/os2forms": "^2.1 || ^3.0"
+        "os2forms/os2forms": "^2.1 || ^3.0 || dev-f/d10_readiness"
     }
 }
