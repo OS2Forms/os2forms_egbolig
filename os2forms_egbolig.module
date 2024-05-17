@@ -12,8 +12,6 @@ use Drupal\Core\Form\FormStateInterface;
  * OS2Forms EGBolig functionality module.
  */
 
-module_load_include('inc', 'os2forms_egbolig', 'os2forms_egbolig.utils');
-
 const CACHE_ID_OS2FORMS_EGBOLIG_INSTITUTION_NAME_OPTIONS = 'os2forms_egbolig_institution_name_options';
 const CACHE_ID_OS2FORMS_EGBOLIG_EDUCATION_TYPE_OPTIONS = 'os2forms_egbolig_education_type_options';
 const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_COUNTRY = 'DANMARK';
@@ -35,6 +33,8 @@ const OS2FORMS_EGBOLIG_MEMBER_DEFAULT_MAX_SQM = 9999;
  * Implements hook_form_FORM_ID_alter().
  */
 function os2forms_egbolig_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  \Drupal::moduleHandler()->loadInclude('os2forms_egbolig', 'inc', 'os2forms_egbolig.utils');
+
   if ($form_id == 'webform_submission_os2forms_egbolig_webform_add_form') {
     $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
 
@@ -222,6 +222,7 @@ function os2forms_egbolig_webform_options_os2forms_egbolig_educ_type_alter(array
  *   The current state of the form.
  */
 function os2forms_egbolig_sync_submission(array $form, FormStateInterface $form_state) {
+  \Drupal::moduleHandler()->loadInclude('os2forms_egbolig', 'inc', 'os2forms_egbolig.utils');
   $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
 
   /** @var \Drupal\os2forms_egbolig\Plugin\os2web\DataLookup\EgboligDatalookupInterface $egboligClient */
