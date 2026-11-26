@@ -119,8 +119,16 @@ function os2forms_egbolig_populate_partner($member, FormStateInterface $form_sta
     $partner_cpr62 = substr($partner_cpr, 0, 6);
     $partner_cpr42 = substr($partner_cpr, -4);
 
-    $cprInfo = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('serviceplatformen_cpr')->getAddress($partner_cpr);
-    $partner_name = $cprInfo['name'];
+    /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
+    $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+    /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+    $cprPlugin = $pluginManager->createDefaultInstanceByGroup('cpr_lookup');
+
+    $partner_name = '';
+    if ($cprPlugin->isReady()) {
+      $cprResult = $cprPlugin->lookup($partner_cpr);
+      $partner_name = $cprResult->getName();
+    }
 
     $partner = new stdClass();
     $partner->memberCompanyNo = $member->MemberCompanyNo;
@@ -159,8 +167,10 @@ function os2forms_egbolig_sync_children($member, FormStateInterface $form_state)
   $values = $form_state->getValues();
   $existingChildren = $egboligClient->fetchChildren($member);
 
-  /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\ServiceplatformenCPR $cprService */
-  $cprService = \Drupal::service('plugin.manager.os2web_datalookup')->createInstance('serviceplatformen_cpr');
+  /** @var \Drupal\os2web_datalookup\Plugin\DataLookupManager $pluginManager */
+  $pluginManager = \Drupal::service('plugin.manager.os2web_datalookup');
+  /** @var \Drupal\os2web_datalookup\Plugin\os2web\DataLookup\DataLookupCPRInterface $cprPlugin */
+  $cprPlugin = $pluginManager->createDefaultInstanceByGroup('cpr_lookup');
 
   for ($i = 1; $i <= 10; $i++) {
     $child_cpr = $values["child_cpr_nr_$i"];
@@ -169,8 +179,8 @@ function os2forms_egbolig_sync_children($member, FormStateInterface $form_state)
       // Adding child if child is not in the list already.
       if (!_os2forms_egbolig_child_exists($child_cpr, $existingChildren)) {
         // Getting children name.
-        $cprInfo = $cprService->getAddress($child_cpr);
-        $child_name = $cprInfo['name'];
+        $cprResult = $cprPlugin->lookup($child_cpr);
+        $child_name = $cprResult->getName();
 
         $child = new stdClass();
         $child->MemberNo = $member->MemberNo;
